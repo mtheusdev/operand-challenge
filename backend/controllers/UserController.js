@@ -5,7 +5,49 @@ class UserController{
     const users = await User.findAll();
     if(users.error) {
       res.status(500).json({
-        error: "Erro no servidor! " + resultDescription.error
+        error: users.error
+      })
+    }else{
+      res.json(users)
+    }
+  }
+
+  async edit(req, res) {
+    var { id, name, email} = req.body
+    var result = await User.update(id, email, name)
+    if (result != undefined) {
+      if (result.status) {
+        res.json({
+          status: true, 
+          result: "Atualizado com sucesso!"
+        })
+      }else{
+        res.status(500).json(result)
+      }
+    }
+    else{
+      res.status(500).json({error: "Erro no servidor"})
+    }
+  }
+
+  async remove (req, res) {
+    const id = req.params.id
+    const resultado = await User.delete(id);
+    if(resultado.error) {
+      res.status(403).json({
+        error: resultado.error
+      })
+    }else{
+      res.json(resultado)
+    }
+  }
+
+  async findUser (req, res) {
+    const id = req.params.id
+    const users = await User.findById(id);
+    if(users.error) {
+      res.status(500).json({
+        error: users.error
       })
     }else{
       res.json(users)
