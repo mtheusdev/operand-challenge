@@ -1,4 +1,5 @@
 var User = require('../models/User')
+const bcrypt = require('bcrypt')
 class UserController{
 
   async index (req, res) {
@@ -42,6 +43,16 @@ class UserController{
     }
   }
 
+  async login (req, res) {
+    var {email, password} = req.body
+    var user = await User.findByEmail(email)
+    if (user.status) {
+      var resultado = await bcrypt.compare(password, user.user.password)
+      res.json({status: resultado})
+    } else {
+      res.json({status: false})
+    }
+  }
   async findUser (req, res) {
     const id = req.params.id
     const users = await User.findById(id);

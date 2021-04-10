@@ -88,6 +88,28 @@ class User {
         }
     }
 
+    async findByEmail(email) {
+        try {
+            var result = await knex.select(["id","password", "email", "name"]).where({ email }).table("users");
+            if (result.length > 0) {
+                return {
+                    status: true,
+                    user: result[0]
+                }
+            } else {
+                return {
+                    status: false,
+                    error: 'Nenhum usuário encontrado'
+                }
+            }
+        } catch (err) {
+            return {
+                status: false,
+                error: err
+            }
+        }
+    }
+
     async delete(id) {
         const user = await this.findById(id)
         if(user.error){
