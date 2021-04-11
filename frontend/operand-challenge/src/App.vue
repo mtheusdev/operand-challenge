@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app class="global" dark>
     <v-main>
       <router-view />
     </v-main>
@@ -18,3 +18,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .global {
+    font-family: Poppins;
+  }
+</style>

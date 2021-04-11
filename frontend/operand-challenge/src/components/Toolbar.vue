@@ -14,6 +14,9 @@
       <v-btn icon>
         <v-icon @click="onclickicon" color="primary">{{icon}}</v-icon>
       </v-btn>
+      <v-btn icon>
+        <v-icon @click="goToPerfil" color="secondary">mdi-account</v-icon>
+      </v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -27,7 +30,10 @@ export default {
   },
   methods: {
     goToHome () {
-      this.$router.push('/')
+      this.$router.push('/').catch(() => {})
+    },
+    goToPerfil () {
+      this.$router.push('/perfil').catch(() => {})
     }
   }
 }

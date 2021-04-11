@@ -84,10 +84,10 @@ export default {
         this.$emit('closeDialogDelete')
       } else {
         axios.delete(`${baseApiUrl}/user/${this.user.id}`).then(() => {
-          this.$store.commit('setUser', null)
+          this.$store.commit('setUser', {})
           this.dialogOpenClose = false
           this.$emit('closeDialogDelete')
-          this.$router.push('/')
+          this.$router.push('/').catch(() => {})
         }).catch(errors => {
           this.error_text = 'Ocorreu um erro ao tentar excluir: ' + errors
           this.snackbar = true

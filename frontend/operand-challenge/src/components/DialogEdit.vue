@@ -14,15 +14,20 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  label="Email"
+                  label="Nome"
                   required
+                  type="email"
+                  :value="user.name"
+                  v-model="user.name"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="Senha"
-                  type="password"
+                  label="Email"
+                  type="email"
                   required
+                  v-model="user.email"
+                  :value="user.email"
                 ></v-text-field>
               </v-col>
               <v-col
@@ -33,6 +38,7 @@
                   :items="['Desenvolvedor Front-end', 'Desenvolvedor Back-end', 'Recursos Humanos', 'Gestor de Projeto']"
                   label="Cargo"
                   required
+                  disabled
                 ></v-select>
               </v-col>
             </v-row>
@@ -48,9 +54,9 @@
             Fechar
           </v-btn>
           <v-btn
-            color="primary"
+            color="secondary"
             text
-            @click="eventClose"
+            @click="eventCloseEditar"
           >
             Salvar
           </v-btn>
@@ -61,6 +67,10 @@
 </template>
 
 <script>
+
+import axios from 'axios'
+import { baseApiUrl } from '@/global'
+
 export default {
   name: 'DialogEdit',
   props: {
@@ -68,14 +78,40 @@ export default {
   },
   data () {
     return {
-      dialogOpenClose: false
+      dialogOpenClose: false,
+      user: {}
     }
   },
   created () {
     this.dialogOpenClose = this.dialog
+    this.user = {
+      ...this.$store.state.user
+    }
   },
   methods: {
     eventClose () {
+      this.dialogOpenClose = false
+      this.$emit('closeDialog')
+    },
+    eventCloseEditar () {
+      axios.put(`${baseApiUrl}/user`, this.user).then(response => {
+        axios.get(`${baseApiUrl}/user/email/${this.user.email}`).then(response => {
+          if (response.data.user) {
+            this.$store.commit('setUser', response.data.user)
+            this.dialogOpenClose = false
+            this.$emit('closeDialogAndRefreshUser')
+          } else {
+            this.error_text = 'Usuário não encontrado!'
+            this.snackbar = true
+          }
+        }).catch(errors => {
+          this.error_text = 'Ocorreu um erro: ' + errors
+          this.snackbar = true
+        })
+      }).catch(errors => {
+        this.error_text = 'Ocorreu um erro: ' + errors
+        this.snackbar = true
+      })
       this.dialogOpenClose = false
       this.$emit('closeDialog')
     }

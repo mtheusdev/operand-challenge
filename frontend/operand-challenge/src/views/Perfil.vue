@@ -3,13 +3,7 @@
     <Toolbar icon="mdi-home" :onclickicon="goToHome"/>
     <v-container >
       <v-layout class="container">
-        <div class="logo">
-          <v-img
-            max-height="150"
-            max-width="250"
-            src="./../assets/logo.png"
-            ></v-img>
-        </div>
+        <MainLogo/>
         <div class="welcome">
           <v-card
     class="mx-auto"
@@ -17,12 +11,8 @@
     dark
     max-width="600"
   >
-    <v-card-title>
-      <span class="title font-weight-light">{{user.name}}</span>
-    </v-card-title>
-
     <v-card-text class="headline font-weight-light">
-      Olá, {{user.name}}! Este é o seu perfil. Aqui você pode gerenciar sua conta editando seus dados ou excluindo seus registros.
+      Olá, {{user.name}}! Aqui no seu perfil você pode gerenciar sua conta editando seus dados ou excluindo sua conta.
       Você também pode dar uma olhadinha na lista de usuarios existentes na Operand!
     </v-card-text>
 
@@ -81,7 +71,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-      <DialogEdit @closeDialog="dialogEditar=false" :dialog="dialogEditar"/>
+      <DialogEdit @closeDialogAndRefreshUser="refreshStoreAndCloseDialog" @closeDialog="dialogEditar=false" :dialog="dialogEditar"/>
       <DialogExcluir @closeDialogDelete="dialogExcluir=false" :dialog="dialogExcluir"/>
   </div>
 </template>
@@ -90,19 +80,28 @@
 import Toolbar from '../components/Toolbar.vue'
 import DialogEdit from '../components/DialogEdit.vue'
 import DialogExcluir from '../components/DialogExcluir.vue'
+import MainLogo from '../components/MainLogo.vue'
 // import { mapState } from 'vuex'
 export default {
   components: {
     Toolbar,
     DialogEdit,
-    DialogExcluir
+    DialogExcluir,
+    MainLogo
   },
   methods: {
     goToHome () {
-      this.$router.push('/')
+      this.$router.push('/').catch(() => {})
     },
     goToListUsers () {
-      this.$router.push('/ourteam')
+      this.$router.push('/ourteam').catch(() => {})
+    },
+    refreshStoreAndCloseDialog () {
+      console.log('entrei no refreshStoreAndCloseDialog')
+      this.user = {
+        ...this.$store.state.user
+      }
+      this.dialogExcluir = false
     }
   },
   name: 'Perfil',
@@ -117,6 +116,11 @@ export default {
   created () {
     this.user = {
       ...this.$store.state.user
+    }
+  },
+  beforeCreate () {
+    if (!this.$store.state.user.name) {
+      this.$router.push('/').catch(() => {})
     }
   }
 }

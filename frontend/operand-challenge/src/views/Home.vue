@@ -3,15 +3,9 @@
     <Toolbar icon="mdi-login" :onclickicon="login"/>
     <v-container >
       <v-layout class="container">
-        <div class="logo">
-          <v-img
-            max-height="150"
-            max-width="250"
-            src="./../assets/logo.png"
-            ></v-img>
-        </div>
+        <MainLogo/>
         <div class="welcome">
-          <v-card max-width="460" elevation="10">
+          <v-card max-width="510" elevation="10">
             <v-card-title class="pa-10">
               Olá, seja bem vindo ao painel de controle dos usuários da Operand !
             </v-card-title>
@@ -32,18 +26,19 @@
 <script>
 
 import Toolbar from '@/components/Toolbar.vue'
-
+import MainLogo from '../components/MainLogo.vue'
 export default {
   name: 'Home',
   components: {
-    Toolbar
+    Toolbar,
+    MainLogo
   },
   methods: {
     login () {
-      this.$router.push('/login')
+      this.$router.push('/login').catch(() => {})
     },
     goToListUsers () {
-      this.$router.push('/ourteam')
+      this.$router.push('/ourteam').catch(() => {})
     }
   }
 }

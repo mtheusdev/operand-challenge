@@ -4,22 +4,19 @@ import Home from './../views/Home.vue'
 import Login from './../views/Login.vue'
 import Perfil from './../views/Perfil.vue'
 import OurTeam from './../views/OurTeam.vue'
-// import Home from './../views/Home.vue'
-// import Home from './../views/Home.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
-    exact: true
+    component: Home
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login,
-    exact: true
+    component: Login
   },
   {
     path: '/perfil',
@@ -31,11 +28,6 @@ const routes = [
     name: 'OurTeam',
     component: OurTeam
   }
-  // {
-  //   path: '/home',
-  //   name: 'Home',
-  //   component: Home
-  // }
 ]
 
 const router = new VueRouter({

@@ -3,8 +3,9 @@
     <Toolbar icon="mdi-home" :onclickicon="goToHome"/>
       <div class="center">
       <v-container v-if="isLogin" fill-height align-center justify-center>
-          <v-card min-width="400">
+          <v-card min-width="600">
             <v-card-title class="orange--text" primary-title>Bem vindo de volta
+              <v-progress-circular class="ml-4" v-show="isLoadingLogin" indeterminate color="orange" width="1"></v-progress-circular>
               <v-spacer></v-spacer>
               <v-btn color="success" outlined @click="isLogin = false">
                 Registrar
@@ -22,8 +23,9 @@
           </v-card>
     </v-container>
     <v-container v-else fill-height align-center justify-center>
-          <v-card min-width="400">
+          <v-card min-width="700">
             <v-card-title class="blue--text" primary-title>Registro
+              <v-progress-circular class="ml-4" v-show="isLoadingRegister" indeterminate color="blue" width="1"></v-progress-circular>
                <v-spacer></v-spacer>
               <v-btn @click="isLogin = true" outlined color="orange">
                 Já possuo uma conta
@@ -76,9 +78,10 @@ export default {
   name: 'Login',
   data () {
     return {
-      isLogin: false,
+      isLogin: true,
       snackbar: false,
-      isLoading: false,
+      isLoadingLogin: false,
+      isLoadingRegister: false,
       error_text: '',
       user: {
         name: '',
@@ -90,45 +93,55 @@ export default {
   },
   methods: {
     goToHome () {
-      this.$router.push('/')
+      this.$router.push('/').catch(() => {})
     },
     submit (value) {
       if (value === 'login') {
-        axios.post(`${baseApiUrl}/login`, this.user).then(response => {
-          if (response.data.status) {
-            axios.get(`${baseApiUrl}/user/email/${this.user.email}`).then(response => {
-              if (response.data.user) {
-                this.$store.commit('setUser', response.data.user)
-                this.$router.push('/perfil')
-              } else {
-                this.error_text = 'Usuário não encontrado!'
+        this.isLoadingLogin = true
+        setInterval(() => {
+          axios.post(`${baseApiUrl}/login`, this.user).then(response => {
+            if (response.data.status) {
+              axios.get(`${baseApiUrl}/user/email/${this.user.email}`).then(response => {
+                if (response.data.user) {
+                  this.$store.commit('setUser', response.data.user)
+                  this.isLoadingLogin = false
+                  this.$router.push('/perfil')
+                } else {
+                  this.error_text = 'Usuário não encontrado!'
+                  this.snackbar = true
+                }
+              }).catch(errors => {
+                this.error_text = 'Ocorreu um erro: ' + errors
                 this.snackbar = true
-              }
-            }).catch(errors => {
-              this.error_text = 'Ocorreu um erro: ' + errors
+              })
+            } else {
+              this.error_text = 'Credenciais incorretas! Tente novamente'
               this.snackbar = true
-            })
-          } else {
-            this.error_text = 'Credenciais incorretas! Tente novamente'
-            this.snackbar = true
-          }
-        }).catch(errors => {
-          this.error_text = 'Ocorreu um erro: ' + errors
-          this.snackbar = true
-        })
-      } else {
-        if (this.user.password !== this.user.confirmPassword) {
-          this.error_text = 'Senhas não coincidem!'
-          this.snackbar = true
-        } else {
-          axios.post(`${baseApiUrl}/user`, this.user).then(() => {
-            this.$store.commit('setUser', this.user)
-            this.$router.push('/perfil')
+            }
           }).catch(errors => {
             this.error_text = 'Ocorreu um erro: ' + errors
             this.snackbar = true
           })
-        }
+          this.isLoadingLogin = false
+        }, 2000) // SIMULANDO LOADING
+      } else {
+        this.isLoadingRegister = true
+        setInterval(() => {
+          if (this.user.password !== this.user.confirmPassword) {
+            this.error_text = 'Senhas não coincidem!'
+            this.snackbar = true
+          } else {
+            axios.post(`${baseApiUrl}/user`, this.user).then(() => {
+              this.$store.commit('setUser', this.user)
+              this.isLoadingRegister = false
+              this.$router.push('/perfil').catch(() => {})
+            }).catch(errors => {
+              this.error_text = 'Ocorreu um erro: ' + errors
+              this.snackbar = true
+            })
+          }
+          this.isLoadingRegister = false
+        }, 2000) // SIMULANDO LOADING
       }
     }
   },
