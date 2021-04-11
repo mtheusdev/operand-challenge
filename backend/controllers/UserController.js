@@ -65,6 +65,18 @@ class UserController{
     }
   }
 
+  async findUserByEmail (req, res) {
+    const email = req.params.email
+    const users = await User.findByEmail2(email);
+    if(users.error) {
+      res.status(500).json({
+        error: users.error
+      })
+    }else{
+      res.json(users)
+    }
+  }
+
   async create(req, res){
 
     var {name, email, password, confirmPassword} = req.body

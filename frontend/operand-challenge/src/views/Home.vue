@@ -17,7 +17,7 @@
             </v-card-title>
             <v-card-actions class="pa-3 mb-4 mr-4">
               <v-spacer></v-spacer>
-              <v-btn rounded large color="orange">Nosso time</v-btn>
+              <v-btn @click="goToListUsers" outlined rounded large color="orange">Nosso time</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -41,15 +41,18 @@ export default {
   methods: {
     login () {
       this.$router.push('/login')
+    },
+    goToListUsers () {
+      this.$router.push('/ourteam')
     }
   }
 }
 </script>
 
 <style scoped>
-  .a {
+  /* .a {
     border: 1px solid red
-  }
+  } */
   .container {
     display: flex;
     flex-direction: column;
