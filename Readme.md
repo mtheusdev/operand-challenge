@@ -8,7 +8,7 @@ Back-end: NodeJS, Express, Knex e MySQL.
 
   Passo a passo para a execução do back-end: 
 
-  1. Antes de executar o servidor, certifique-se que as suas  configurações do banco de dados e conexão com o mesmo estejam de acordo com o projeto, este foi baseado em MySQL, então é necessário configurar um schema local no seu ambiente. Para efetuar a criação do schema e tabela utilizados no projeto, basta executar o script "operand.sql", que está no diretório raiz do projeto.
+  1. Antes de executar o servidor, certifique-se que as suas  configurações do banco de dados e conexão com o mesmo estejam de acordo com o projeto, este foi baseado em MySQL, então é necessário configurar um schema local no seu ambiente. Para efetuar a criação do schema e tabela utilizados no projeto, basta executar o script "operand.sql" que está no diretório raiz do projeto em alguma SQL TAB, Query TAB, no meu caso, utilizei a QueryTab fornecida pela aplicação MySQL WorkBench.
   
   2. Agora que o banco está configurado, é necessário reconfigurar o arquivo connection.js que está no diretório: backend/database/connection.js, neste arquivo você deve configurar o "host", "user" e "password" de acordo acordo com a sua conexão no banco de dados. (A que eu utilizo é a padrão: host: localhost, user: root e password: '')
 
