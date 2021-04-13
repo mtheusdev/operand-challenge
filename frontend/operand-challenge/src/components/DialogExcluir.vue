@@ -51,7 +51,7 @@
 <script>
 
 import axios from 'axios'
-import { baseApiUrl } from '@/global'
+import { baseApiUrl, userId } from '@/global'
 
 export default {
   name: 'DialogExcluir',
@@ -85,6 +85,7 @@ export default {
       } else {
         axios.delete(`${baseApiUrl}/user/${this.user.id}`).then(() => {
           this.$store.commit('setUser', {})
+          localStorage.removeItem(userId)
           this.dialogOpenClose = false
           this.$emit('closeDialogDelete')
           this.$router.push('/').catch(() => {})

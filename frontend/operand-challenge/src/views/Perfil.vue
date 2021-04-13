@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Toolbar icon="mdi-home" :onclickicon="goToHome"/>
+    <Toolbar/>
     <v-container >
       <v-layout class="container">
         <MainLogo/>
@@ -90,14 +90,10 @@ export default {
     MainLogo
   },
   methods: {
-    goToHome () {
-      this.$router.push('/').catch(() => {})
-    },
     goToListUsers () {
       this.$router.push('/ourteam').catch(() => {})
     },
     refreshStoreAndCloseDialog () {
-      console.log('entrei no refreshStoreAndCloseDialog')
       this.user = {
         ...this.$store.state.user
       }
@@ -116,11 +112,6 @@ export default {
   created () {
     this.user = {
       ...this.$store.state.user
-    }
-  },
-  beforeCreate () {
-    if (!this.$store.state.user.name) {
-      this.$router.push('/').catch(() => {})
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
 <div class="global">
-    <Toolbar icon="mdi-home" :onclickicon="goToHome"/>
+    <Toolbar/>
     <v-container >
       <v-layout class="container">
         <MainLogo />
@@ -45,9 +45,6 @@ export default {
   },
   name: 'OurTeam',
   methods: {
-    goToHome () {
-      this.$router.push('/').catch(() => {})
-    },
     randonAvatar (max, min) {
       max = 3
       min = 0

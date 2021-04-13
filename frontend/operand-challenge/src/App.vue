@@ -1,7 +1,9 @@
 <template>
   <v-app class="global" dark>
     <v-main>
-      <router-view />
+      <transition name="fade">
+        <router-view />
+      </transition>
     </v-main>
   </v-app>
 </template>
@@ -22,5 +24,17 @@ export default {
 <style>
   .global {
     font-family: Poppins;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition-property: opacity;
+    transition-duration: 0.5s;
+  }
+
+  .fade-enter-active {
+    transition-delay: .5s;
+  }
+
+  .fade-enter, .fade-leave-active {
+    opacity: 0
   }
 </style>

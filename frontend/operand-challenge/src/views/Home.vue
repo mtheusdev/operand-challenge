@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Toolbar icon="mdi-login" :onclickicon="login"/>
+    <Toolbar/>
     <v-container >
       <v-layout class="container">
         <MainLogo/>
@@ -16,7 +16,7 @@
           </v-card>
         </div>
         <v-flex class="pa-5">
-          <v-btn class="mr-4" @click="login" block large color="orange">Login | Registro</v-btn>
+          <v-btn class="mr-4" @click="login" block large color="orange">Meu Perfil</v-btn>
         </v-flex>
       </v-layout>
     </v-container>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     login () {
-      this.$router.push('/login').catch(() => {})
+      this.$router.push('/Perfil').catch(() => {})
     },
     goToListUsers () {
       this.$router.push('/ourteam').catch(() => {})

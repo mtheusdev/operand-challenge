@@ -11,8 +11,8 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn icon>
-        <v-icon @click="onclickicon" color="primary">{{icon}}</v-icon>
+      <v-btn v-if="isLogged" icon>
+        <v-icon @click="goToLogin" color="primary">mdi-logout</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon @click="goToPerfil" color="secondary">mdi-account</v-icon>
@@ -22,11 +22,13 @@
 </template>
 
 <script>
+import { userId } from '@/global'
 export default {
   name: 'Header',
-  props: {
-    icon: String,
-    onclickicon: Function
+  data () {
+    return {
+      isLogged: false
+    }
   },
   methods: {
     goToHome () {
@@ -34,7 +36,18 @@ export default {
     },
     goToPerfil () {
       this.$router.push('/perfil').catch(() => {})
+    },
+    async goToLogin () {
+      await localStorage.removeItem(userId)
+      await this.$store.commit('setUser', null)
+      this.isLogged = false
+      this.$router.push('/Login').catch(() => {})
     }
+  },
+  async created () {
+    const json = localStorage.getItem(userId)
+    const user = JSON.parse(json)
+    await user ? this.isLogged = true : this.isLogged = false
   }
 }
 </script>
